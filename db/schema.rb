@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_29_153125) do
+ActiveRecord::Schema.define(version: 2021_01_29_170057) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,28 @@ ActiveRecord::Schema.define(version: 2021_01_29_153125) do
     t.string "occupation", default: "", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "inventory_restocks", force: :cascade do |t|
+    t.bigint "part_supplier_id", null: false
+    t.bigint "part_inventory_id", null: false
+    t.integer "restock_count"
+    t.integer "price_per_piece_cents", default: 0, null: false
+    t.string "price_per_piece_currency", default: "USD", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["part_inventory_id"], name: "index_inventory_restocks_on_part_inventory_id"
+    t.index ["part_supplier_id"], name: "index_inventory_restocks_on_part_supplier_id"
+  end
+
+  create_table "inventory_suppliers", force: :cascade do |t|
+    t.bigint "part_supplier_id", null: false
+    t.bigint "part_inventory_id", null: false
+    t.string "grade"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["part_inventory_id"], name: "index_inventory_suppliers_on_part_inventory_id"
+    t.index ["part_supplier_id"], name: "index_inventory_suppliers_on_part_supplier_id"
   end
 
   create_table "jobs", force: :cascade do |t|
@@ -39,6 +61,70 @@ ActiveRecord::Schema.define(version: 2021_01_29_153125) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["customer_id"], name: "index_jobs_on_customer_id"
     t.index ["user_id"], name: "index_jobs_on_user_id"
+  end
+
+  create_table "labour_jobs", force: :cascade do |t|
+    t.string "description"
+    t.integer "cost_cents", default: 0, null: false
+    t.string "cost_currency", default: "USD", null: false
+    t.datetime "expected_time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "line_labours", force: :cascade do |t|
+    t.bigint "job_id", null: false
+    t.bigint "labour_job_id", null: false
+    t.bigint "mechanic_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["job_id"], name: "index_line_labours_on_job_id"
+    t.index ["labour_job_id"], name: "index_line_labours_on_labour_job_id"
+    t.index ["mechanic_id"], name: "index_line_labours_on_mechanic_id"
+  end
+
+  create_table "line_parts", force: :cascade do |t|
+    t.bigint "job_id", null: false
+    t.bigint "part_inventory_id", null: false
+    t.integer "quantity"
+    t.integer "total_price_parts_cents", default: 0, null: false
+    t.string "total_price_parts_currency", default: "USD", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["job_id"], name: "index_line_parts_on_job_id"
+    t.index ["part_inventory_id"], name: "index_line_parts_on_part_inventory_id"
+  end
+
+  create_table "mechanics", force: :cascade do |t|
+    t.string "name", default: ""
+    t.integer "salary_cents", default: 0, null: false
+    t.string "salary_currency", default: "USD", null: false
+    t.string "national_id_number", default: ""
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "part_inventories", force: :cascade do |t|
+    t.string "description"
+    t.integer "price_cents", default: 0, null: false
+    t.string "price_currency", default: "USD", null: false
+    t.integer "selling_price_cents", default: 0, null: false
+    t.string "selling_price_currency", default: "USD", null: false
+    t.string "brand_name"
+    t.integer "stock_count"
+    t.integer "trigger_limit"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "part_suppliers", force: :cascade do |t|
+    t.string "vendor_name"
+    t.string "vendor_address"
+    t.string "vendor_number"
+    t.bigint "part_inventory_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["part_inventory_id"], name: "index_part_suppliers_on_part_inventory_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -64,6 +150,16 @@ ActiveRecord::Schema.define(version: 2021_01_29_153125) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "inventory_restocks", "part_inventories"
+  add_foreign_key "inventory_restocks", "part_suppliers"
+  add_foreign_key "inventory_suppliers", "part_inventories"
+  add_foreign_key "inventory_suppliers", "part_suppliers"
   add_foreign_key "jobs", "customers"
   add_foreign_key "jobs", "users"
+  add_foreign_key "line_labours", "jobs"
+  add_foreign_key "line_labours", "labour_jobs"
+  add_foreign_key "line_labours", "mechanics"
+  add_foreign_key "line_parts", "jobs"
+  add_foreign_key "line_parts", "part_inventories"
+  add_foreign_key "part_suppliers", "part_inventories"
 end
