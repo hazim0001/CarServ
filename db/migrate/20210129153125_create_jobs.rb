@@ -6,6 +6,10 @@ class CreateJobs < ActiveRecord::Migration[6.0]
       t.string :car_model, null: false, default: ""
       t.string :mileage, null: false, default: 0
       t.boolean :active, default: true
+      t.string :problem
+      t.string :work_done_description, default: ""
+      t.monetize :total_job, default: 0
+
 
       t.timestamps
     end

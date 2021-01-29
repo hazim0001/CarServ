@@ -30,6 +30,11 @@ ActiveRecord::Schema.define(version: 2021_01_29_153125) do
     t.bigint "customer_id", null: false
     t.string "car_model", default: "", null: false
     t.string "mileage", default: "0", null: false
+    t.boolean "active", default: true
+    t.string "problem"
+    t.string "work_done_description", default: ""
+    t.integer "total_job_cents", default: 0, null: false
+    t.string "total_job_currency", default: "USD", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["customer_id"], name: "index_jobs_on_customer_id"
@@ -51,6 +56,7 @@ ActiveRecord::Schema.define(version: 2021_01_29_153125) do
     t.boolean "staff", default: true
     t.integer "salary", default: 0
     t.string "address", default: "", null: false
+    t.string "role", default: "", null: false
     t.string "name", default: "", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
