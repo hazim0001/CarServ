@@ -37,6 +37,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[6.0]
       t.boolean :staff, default: true
       t.integer :salary, default: 0
       t.string :address, null: false, default: ""
+      t.string :role, null: false, default: ""
       t.string :name, null: false, default: ""
 
 
