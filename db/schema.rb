@@ -121,10 +121,8 @@ ActiveRecord::Schema.define(version: 2021_01_29_170057) do
     t.string "vendor_name"
     t.string "vendor_address"
     t.string "vendor_number"
-    t.bigint "part_inventory_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["part_inventory_id"], name: "index_part_suppliers_on_part_inventory_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -162,5 +160,4 @@ ActiveRecord::Schema.define(version: 2021_01_29_170057) do
   add_foreign_key "line_labours", "mechanics"
   add_foreign_key "line_parts", "jobs"
   add_foreign_key "line_parts", "part_inventories"
-  add_foreign_key "part_suppliers", "part_inventories"
 end

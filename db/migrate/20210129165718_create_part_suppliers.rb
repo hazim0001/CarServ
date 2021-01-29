@@ -4,7 +4,6 @@ class CreatePartSuppliers < ActiveRecord::Migration[6.0]
       t.string :vendor_name
       t.string :vendor_address
       t.string :vendor_number
-      t.references :part_inventory, null: false, foreign_key: true
 
       t.timestamps
     end
