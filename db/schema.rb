@@ -140,7 +140,8 @@ ActiveRecord::Schema.define(version: 2021_01_29_170057) do
     t.inet "last_sign_in_ip"
     t.boolean "admin", default: false
     t.boolean "staff", default: true
-    t.integer "salary", default: 0
+    t.integer "salary_cents", default: 0, null: false
+    t.string "salary_currency", default: "USD", null: false
     t.string "address", default: "", null: false
     t.string "role", default: "", null: false
     t.string "name", default: "", null: false
