@@ -7,4 +7,6 @@ class PartInventory < ApplicationRecord
 
   has_many :inventory_restocks
 
+  monetize :price_cents
+  monetize :selling_price_cents
 end

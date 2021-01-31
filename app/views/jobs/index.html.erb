@@ -1,8 +1,417 @@
-<h1>Jobs#index</h1>
-<p>Find me in app/views/jobs/index.html.erb</p>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCustomerModal">
+  New Customer
+</button>
+
+<%= render 'customers/new_customer_modal' %>
+
+
+
+
+<div class="container">
+  <div class="card-product">
+    <img src="https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/skateboard.jpg" />
+    <div class="card-product-infos">
+      <h2>Product name</h2>
+      <p>Product description with <strong>relevant info</strong> only.</p>
+    </div>
+  </div>
+</div>
+
+
 <div class="container">
   <% @jobs.each do |job| %>
-    <li><%=job.car_model%> - <%=job.mileage%> - <%=job.problem%></li>
-  <% end %>
+    <%= link_to job_path(job) do %>
 
+        <div class="courses-container">
+          <div class="course">
+            <div class="course-preview">
+              <h6>Job# <%= job.id %></h6>
+              <h3><%=job.car_model%></h3>
+              <!-- <a href="#">View all chapters <i class="fas fa-chevron-right"></i></a> -->
+            </div>
+            <div class="course-info">
+              <div class="progress-container">
+                <!-- <div class="progress"></div> -->
+                <span class="progress-text">
+                  <%= job.user.email %>
+                </span>
+              </div>
+              <h6><%=job.problem%></h6>
+              <h3><%= job.work_done_description %></h3>
+              <button class="btn-new"><%= humanized_money_with_symbol(job.total_job) %></button>
+            </div>
+          </div>
+        </div>
+
+
+    <% end %>
+  <% end %>
 </div>
+
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-5 bg-light p-4 rounded-lg">
+      <h1 class="font-weight-bold">New Job</h1>
+      <%= simple_form_for @new_job, url: jobs_path do |f| %>
+        <%= f.input :car_model %>
+        <%= f.input :mileage %>
+        <%= f.input :problem %>
+        <%= f.association :customer %>
+        <%= f.submit 'Create Job', class: "btn btn-primary colored-btn" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+<style>
+  .card-product {
+    overflow: hidden;
+    height: 120px;
+    background: white;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+  }
+
+  .card-product img {
+    height: 100%;
+    width: 120px;
+    object-fit: cover;
+  }
+
+  .card-product h2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .card-product p {
+    font-size: 12px;
+    line-height: 1.4;
+    opacity: .7;
+    margin-bottom: 0;
+    margin-top: 8px;
+  }
+
+  .card-product .card-product-infos {
+    padding: 16px;
+  }
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .bg-purple{
+    background-image: linear-gradient(45deg, #7175da, #9790F2);
+    font-family: 'Muli', sans-serif;
+  }
+
+  body {
+    /* background-image: linear-gradient(45deg, #7175da, #9790F2); */
+    background-image: linear-gradient(45deg, black, #9790F2);
+
+    font-family: 'Muli', sans-serif;
+   /*  display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column; */
+    min-height: 100vh;
+    margin: 0;
+  }
+
+  .courses-container {
+    width:50vw ;
+  }
+
+  .course {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    max-width: 100%;
+    margin: 20px;
+    overflow: hidden;
+    width: 100vw;
+  }
+
+  .course h6 {
+    opacity: 0.6;
+    margin: 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .course h3 {
+    letter-spacing: 1px;
+    margin: 10px 0;
+  }
+
+  .course-preview {
+    background-color: #2A265F;
+    color: #fff;
+    padding: 30px;
+    width: 25rem;
+    max-height: 10rem;
+    min-height: 5rem;
+  }
+
+  .course-preview a {
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    opacity: 0.6;
+    margin-top: 30px;
+    margin-bottom: : 30px;
+    text-decoration: none;
+  }
+
+  .course-info {
+    padding: 30px;
+    position: relative;
+    width: 100%;
+  }
+
+  .progress-container {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    text-align: right;
+    width: 150px;
+  }
+
+  .progress {
+    background-color: #ddd;
+    border-radius: 3px;
+    height: 5px;
+    width: 100%;
+  }
+
+  .progress::after {
+    border-radius: 3px;
+    background-color: #2A265F;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 5px;
+    width: 66%;
+  }
+
+  .progress-text {
+    font-size: 10px;
+    opacity: 0.6;
+    letter-spacing: 1px;
+  }
+
+  .btn-new {
+    background-color: #2A265F;
+    border: 0;
+    border-radius: 50px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 25px;
+    position: absolute;
+    bottom: 11px;
+    right: 14px;
+    letter-spacing: 1px;
+  }
+
+  .colored-btn{
+    background-color: #2A265F;
+    border: 0;
+    border-radius: 50px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 25px;
+    letter-spacing: 1px;
+  }
+
+  /* SOCIAL PANEL CSS */
+  .social-panel-container {
+    position: fixed;
+    right: 0;
+    bottom: 80px;
+    transform: translateX(100%);
+    transition: transform 0.4s ease-in-out;
+  }
+
+  .social-panel-container.visible {
+    transform: translateX(-10px);
+  }
+
+  .social-panel {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 16px 31px -17px rgba(0,31,97,0.6);
+    border: 5px solid #001F61;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Muli';
+    position: relative;
+    height: 169px;
+    width: 370px;
+    max-width: calc(100% - 10px);
+  }
+
+  .social-panel button.close-btn-new {
+    border: 0;
+    color: #97A5CE;
+    cursor: pointer;
+    font-size: 20px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+
+  .social-panel button.close-btn-new:focus {
+    outline: none;
+  }
+
+  .social-panel p {
+    background-color: #001F61;
+    border-radius: 0 0 10px 10px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 18px;
+    padding: 2px 17px 6px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin: 0;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 235px;
+  }
+
+  .social-panel p i {
+    margin: 0 5px;
+  }
+
+  .social-panel p a {
+    color: #FF7500;
+    text-decoration: none;
+  }
+
+  .social-panel h4 {
+    margin: 20px 0;
+    color: #97A5CE;
+    font-family: 'Muli';
+    font-size: 14px;
+    line-height: 18px;
+    text-transform: uppercase;
+  }
+
+  .social-panel ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .social-panel ul li {
+    margin: 0 10px;
+  }
+
+  .social-panel ul li a {
+    border: 1px solid #DCE1F2;
+    border-radius: 50%;
+    color: #001F61;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+    text-decoration: none;
+  }
+
+  .social-panel ul li a:hover {
+    border-color: #FF6A00;
+    box-shadow: 0 9px 12px -9px #FF6A00;
+  }
+
+  .floating-btn-new {
+    border-radius: 26.5px;
+    background-color: #001F61;
+    border: 1px solid #001F61;
+    box-shadow: 0 16px 22px -17px #03153B;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 12px 20px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+  }
+
+  .floating-btn-new:hover {
+    background-color: #ffffff;
+    color: #001F61;
+  }
+
+  .floating-btn-new:focus {
+    outline: none;
+  }
+
+  .floating-text {
+    background-color: #001F61;
+    border-radius: 10px 10px 0 0;
+    color: #fff;
+    font-family: 'Muli';
+    padding: 7px 15px;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 998;
+  }
+
+  .floating-text a {
+    color: #FF7500;
+    text-decoration: none;
+  }
+
+  @media screen and (max-width: 480px) {
+
+    .social-panel-container.visible {
+      transform: translateX(0px);
+    }
+
+    .floating-btn-new {
+      right: 10px;
+    }
+  }
+</style>
